@@ -2,6 +2,23 @@
 
 Search any place, see its most recent clear Sentinel-2 satellite passes, step back through dates. Free data, no API keys. Built from [docs/SPEC.md](docs/SPEC.md) (v1 + v1.1: shareable URL, date stepper with ←/→ keys, auto re-search on pan, self-hosted tiler).
 
+![Before and after: the Kakhovka dam area, June 2023](docs/screenshots/03-before-after.jpg)
+
+<table>
+  <tr>
+    <td><img src="docs/screenshots/01-sentinel2-latest.jpg" alt="Latest Sentinel-2 image with cloud filter"><br><sub><b>Latest Sentinel-2</b> with cloud filter and date stepper</sub></td>
+    <td><img src="docs/screenshots/02-esri-high-res.jpg" alt="Esri sub-metre imagery of the Giza pyramids"><br><sub><b>Esri high-res</b> up to zoom 19</sub></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/04-discover-news.jpg" alt="Discover tab with live news events"><br><sub><b>Discover</b>: live events and curated groups</sub></td>
+    <td><img src="docs/screenshots/05-saved-folders.jpg" alt="Saved places in folders"><br><sub><b>Saved</b> places in folders</sub></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/06-draw-and-measure.jpg" alt="Drawing, measuring and pins"><br><sub><b>Tools</b>: draw, measure, pin, screenshot, share</sub></td>
+    <td><img src="docs/screenshots/07-mobile.jpg" alt="Phone layout" width="240"><br><sub><b>Phone</b> layout</sub></td>
+  </tr>
+</table>
+
 ## Imagery sources (switch in the panel)
 
 | Source | Detail | Dates | Notes |
