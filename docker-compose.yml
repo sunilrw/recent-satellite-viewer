@@ -1,0 +1,19 @@
+services:
+  web:
+    build: .
+    ports:
+      - "${PORT:-8080}:80"
+    depends_on:
+      - titiler
+    restart: unless-stopped
+
+  titiler:
+    image: ghcr.io/developmentseed/titiler:latest
+    environment:
+      - PORT=80
+      - WORKERS_PER_CORE=1
+      - AWS_NO_SIGN_REQUEST=YES        # Sentinel-2 COGs are public
+      - GDAL_DISABLE_READDIR_ON_OPEN=EMPTY_DIR
+      - CPL_VSIL_CURL_ALLOWED_EXTENSIONS=.tif,.TIF
+      - VSI_CACHE=TRUE
+    restart: unless-stopped

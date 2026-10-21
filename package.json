@@ -1,0 +1,28 @@
+{
+  "name": "recent-satellite-viewer",
+  "version": "1.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "leaflet": "^1.9.4"
+  },
+  "devDependencies": {
+    "@types/leaflet": "^1.9.12",
+    "typescript": "^5.6.0",
+    "vite": "^5.4.0",
+    "vitest": "^2.1.0"
+  },
+  "author": "Sunil Warrier",
+  "license": "MIT",
+  "description": "See how any place on Earth looked in recent days: Sentinel-2, NASA daily and Esri imagery, before/after comparisons and live events.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sunilrw/recent-satellite-viewer.git"
+  }
+}

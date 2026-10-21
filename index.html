@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="author" content="Sunil Warrier">
+  <meta name="theme-color" content="#0e1116">
+  <meta name="description" content="See how any place on Earth looked in the last few days. Recent Sentinel-2 satellite passes, free and open.">
+  <title>Recent Satellite Viewer</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+  <div id="map" aria-label="Map"></div>
+
+  <aside id="panel">
+    <header class="brand">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="currentColor"/><ellipse cx="12" cy="12" rx="10" ry="4" fill="none" stroke="currentColor" stroke-width="1.5" transform="rotate(-28 12 12)"/></svg>
+      <h1>Recent Satellite Viewer</h1>
+      <button id="star" class="icon" type="button" aria-label="Save this place" title="Save this place">
+        <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 3.5l2.6 5.5 6 .8-4.4 4.2 1.1 6-5.3-2.9-5.3 2.9 1.1-6L3.4 9.8l6-.8z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+      </button>
+      <button id="share" class="icon" type="button" aria-label="Copy link to this view" title="Copy link">
+        <svg viewBox="0 0 24 24" width="18" height="18"><path d="M10 14a4 4 0 005.7 0l3-3a4 4 0 00-5.7-5.7l-1 1M14 10a4 4 0 00-5.7 0l-3 3a4 4 0 005.7 5.7l1-1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <button id="collapse" class="icon" type="button" aria-label="Collapse panel" aria-expanded="true">
+        <svg viewBox="0 0 24 24" width="18" height="18"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </header>
+
+    <div class="body">
+      <form id="searchForm" role="search">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 16l4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <input id="q" type="search" placeholder="Search a place or address" autocomplete="off" aria-label="Search for a place">
+        <button id="searchBtn" type="submit">Go</button>
+        <ul id="suggest" role="listbox" hidden></ul>
+      </form>
+
+      <section class="sources" aria-label="Imagery source">
+        <div id="sources" role="radiogroup" aria-label="Imagery source"></div>
+        <p id="sourceBlurb"></p>
+      </section>
+
+      <nav class="tabs" role="tablist" aria-label="Sections">
+        <button type="button" role="tab" data-tab="images" class="on">Images</button>
+        <button type="button" role="tab" data-tab="saved">Saved</button>
+        <button type="button" role="tab" data-tab="discover">Discover</button>
+        <button type="button" role="tab" data-tab="find">Find</button>
+        <button type="button" role="tab" data-tab="tools">Tools</button>
+      </nav>
+
+      <div class="tab" data-tab="images">
+
+      <details class="controls" id="filters" open>
+        <summary>Filters</summary>
+        <div class="controls-in">
+        <div class="field" data-needs="days">
+          <label for="days">Look back</label>
+          <div class="seg" id="days" role="radiogroup" aria-label="Look back">
+            <button type="button" role="radio" data-v="14">14d</button>
+            <button type="button" role="radio" data-v="30">30d</button>
+            <button type="button" role="radio" data-v="60">60d</button>
+            <button type="button" role="radio" data-v="90">90d</button>
+            <button type="button" role="radio" data-v="180">180d</button>
+          </div>
+        </div>
+        <div class="field" data-needs="cloud">
+          <label for="cloud">Max cloud <output id="cloudVal">20%</output></label>
+          <input id="cloud" type="range" min="0" max="100" step="5" value="20">
+        </div>
+        <div class="field">
+          <label for="opacity">Image opacity <output id="opacityVal">100%</output></label>
+          <input id="opacity" type="range" min="0" max="100" step="5" value="100">
+        </div>
+        <label class="check" data-needs="cloud"><input id="quick" type="checkbox"><span>Quick low-detail preview</span></label>
+        </div>
+      </details>
+
+      <div class="status-row">
+        <p id="status" role="status" aria-live="polite">Search for a place to see its latest images.</p>
+        <button id="findBtn" type="button" class="ghost">Search here</button>
+      </div>
+
+      <div class="zoomrow">
+        <button id="maxZoom" type="button" class="ghost">⤢ Max zoom</button>
+        <span id="zoomInfo">Zoom –</span>
+      </div>
+
+      <details class="cmp" id="cmpBox" data-needs="compare">
+        <summary>Before / after comparison</summary>
+        <form id="cmpForm">
+          <label>Before <input type="date" id="cmpBefore" max="2100-01-01"></label>
+          <label>After <input type="date" id="cmpAfter" max="2100-01-01"></label>
+          <button id="cmpGo" type="submit" class="primary">Compare</button>
+        </form>
+        <p class="fine">Leave a date empty for “latest”. Uses the clearest image near each date for the current source. Sentinel-2 starts in 2016.</p>
+        <div id="cmpInfo" hidden>
+          <p id="cmpStatus" class="note"></p>
+          <button id="cmpExit" type="button" class="ghost" hidden>Exit comparison</button>
+        </div>
+      </details>
+
+      <div class="stepper" id="stepper" hidden>
+        <button id="older" type="button" class="icon" aria-label="Older image" title="Older (←)">
+          <svg viewBox="0 0 24 24" width="18" height="18"><path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="step-mid"><strong id="stepDate">–</strong><span id="stepAge"></span></div>
+        <button id="newer" type="button" class="icon" aria-label="Newer image" title="Newer (→)">
+          <svg viewBox="0 0 24 24" width="18" height="18"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+
+      <ul id="results" aria-label="Available satellite images"></ul>
+      </div>
+
+      <div class="tab" data-tab="saved" hidden>
+        <div class="actions">
+          <button id="saveHere" type="button" class="ghost">★ Save this view</button>
+          <button id="newFolder" type="button" class="ghost">＋ Folder</button>
+        </div>
+        <form id="saveForm" class="saveform" hidden>
+          <input id="saveName" maxlength="60" placeholder="Name" aria-label="Place name">
+          <select id="saveFolder" aria-label="Folder"></select>
+          <div class="row2"><button type="button" id="saveCancel" class="ghost">Cancel</button><button type="submit" class="primary">Save</button></div>
+        </form>
+        <div id="folders"></div>
+      </div>
+
+      <div class="tab" data-tab="discover" hidden>
+        <p class="lead">Curated places worth a look. Tap a group, tap a place. ☆ saves it to your favourites.</p>
+        <section class="news">
+          <div class="newshead"><h3>📰 In the news now</h3><button id="newsRefresh" type="button" class="ghost">Refresh</button></div>
+          <p id="newsStatus" class="note">Open this tab to load recent events.</p>
+          <div id="newsChips" class="chips"></div>
+          <ul id="newsList" class="newslist"></ul>
+        </section>
+        <h3>Curated groups</h3>
+        <div id="collections"></div>
+      </div>
+
+      <div class="tab" data-tab="find" hidden>
+        <div class="warning" role="note">
+          <strong>⚠ Experimental — often won't work</strong>
+          <span>This relies on free public map servers that are usually overloaded, so most searches fail or time out. It can't detect cars or animals either. Try again later if it fails.</span>
+        </div>
+        <p class="lead">Highlight things on the map in the area you are looking at. Works over any imagery source.</p>
+        <div id="featureChips" class="chips"></div>
+        <div class="actions">
+          <button id="findFeatures" type="button" class="primary">Find in view</button>
+          <button id="clearFeatures" type="button" class="ghost">Clear</button>
+        </div>
+        <p id="featureStatus" class="note"></p>
+        <ul id="featureLegend" class="legend"></ul>
+        <p class="fine">Cars and animals themselves can't be spotted without an AI model. Parking lots show where cars gather; zoos show where animals live. Counts come from OpenStreetMap.</p>
+      </div>
+
+      <div class="tab" data-tab="tools" hidden>
+        <h3>Draw &amp; annotate <small><span id="noteCount">0</span> saved</small></h3>
+        <div id="tools" class="toolgrid">
+          <button type="button" data-tool="pin">📍 Pin</button>
+          <button type="button" data-tool="text">🔤 Text</button>
+          <button type="button" data-tool="line">📏 Measure</button>
+          <button type="button" data-tool="poly">⬠ Area</button>
+          <button type="button" data-tool="pen">✏️ Pen</button>
+          <button type="button" data-tool="circle">◯ Circle</button>
+        </div>
+        <div id="swatches" class="swatches" aria-label="Colour"></div>
+        <p id="toolHint" class="note">Pick a tool, then click or drag on the map.</p>
+        <div class="actions">
+          <button id="noteFinish" type="button" class="ghost">Finish</button>
+          <button id="noteUndo" type="button" class="ghost">Undo</button>
+          <button id="noteVisible" type="button" class="ghost">Hide</button>
+          <button id="noteClear" type="button" class="ghost">Clear</button>
+        </div>
+
+        <h3>Screenshot</h3>
+        <div class="actions">
+          <button id="shotSave" type="button" class="primary">Save PNG</button>
+          <button id="shotCopy" type="button" class="ghost">Copy image</button>
+        </div>
+        <p class="fine">Captures the map with imagery, drawings and credit line, without the panel.</p>
+
+        <h3>Send this location</h3>
+        <div class="actions wrap">
+          <button id="sendShare" type="button" class="ghost">Share…</button>
+          <button id="sendLink" type="button" class="ghost">Copy link</button>
+          <button id="sendCoords" type="button" class="ghost">Copy coordinates</button>
+          <a id="openGoogle" class="ghost btn" target="_blank" rel="noopener">Google Maps ↗</a>
+          <a id="openOsm" class="ghost btn" target="_blank" rel="noopener">OpenStreetMap ↗</a>
+        </div>
+
+        <h3>Open a received location</h3>
+        <form id="openForm" class="inline">
+          <input id="openText" placeholder="Paste a link, coordinates or geo: address" aria-label="Location to open">
+          <button type="submit" class="primary">Open</button>
+        </form>
+        <p class="fine">Understands links from this app, Google Maps, OpenStreetMap, <code>geo:</code> URIs and “lat, lon”.</p>
+
+        <h3>Backup</h3>
+        <div class="actions">
+          <button id="exportAll" type="button" class="ghost">Export all</button>
+          <button id="importAll" type="button" class="ghost">Import…</button>
+          <input id="importFile" type="file" accept="application/json,.json" hidden>
+        </div>
+        <p class="fine">One file with favourites, folders, drawings and filter settings. Importing adds to what you have.</p>
+      </div>
+    </div>
+
+    <footer>
+      <span id="credit"></span> <span id="yr"></span> ·
+      <a href="https://element84.com/earth-search/" target="_blank" rel="noopener">Earth Search</a> ·
+      <a href="https://developmentseed.org/titiler/" target="_blank" rel="noopener">TiTiler</a> ·
+      Base map © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors.
+      Not live — images are days old.
+      <br>Made by <strong>Sunil Warrier</strong> · <a href="https://github.com/sunilrw/recent-satellite-viewer" target="_blank" rel="noopener">Open source (MIT)</a>
+    </footer>
+  </aside>
+
+  <div id="toast" role="alert" hidden></div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
