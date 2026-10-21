@@ -19,6 +19,25 @@ Search any place, see its most recent clear Sentinel-2 satellite passes, step ba
   </tr>
 </table>
 
+## Landmarks from above
+
+Esri high-res imagery. All of these are in the app under Discover → Famous landmarks.
+
+<table>
+  <tr>
+    <td><img src="docs/screenshots/08-eiffel-tower.jpg" alt="Eiffel Tower, Paris"><br><sub>Eiffel Tower, Paris</sub></td>
+    <td><img src="docs/screenshots/09-empire-state-building.jpg" alt="Empire State Building, New York"><br><sub>Empire State Building, New York</sub></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/10-pyramids-of-giza.jpg" alt="Pyramids of Giza"><br><sub>Pyramids of Giza</sub></td>
+    <td><img src="docs/screenshots/11-taj-mahal.jpg" alt="Taj Mahal, Agra"><br><sub>Taj Mahal, Agra</sub></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/12-palm-jumeirah.jpg" alt="Palm Jumeirah, Dubai"><br><sub>Palm Jumeirah, Dubai</sub></td>
+    <td><img src="docs/screenshots/13-colosseum.jpg" alt="Colosseum, Rome"><br><sub>Colosseum, Rome</sub></td>
+  </tr>
+</table>
+
 ## Imagery sources (switch in the panel)
 
 | Source | Detail | Dates | Notes |

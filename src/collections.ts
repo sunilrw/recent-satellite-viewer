@@ -6,6 +6,18 @@ export interface CPlace {
 export interface Collection { id: string; emoji: string; title: string; blurb: string; places: CPlace[] }
 
 const GENERAL: Collection[] = [
+  { id: "landmarks", emoji: "🗽", title: "Famous landmarks", blurb: "Icons you can recognise from above (best with Esri).", places: [
+    { name: "Empire State Building", lat: 40.7484, lon: -73.9857, zoom: 18 },
+    { name: "Giza pyramids", lat: 29.9792, lon: 31.1342, zoom: 17 },
+    { name: "Statue of Liberty", lat: 40.6892, lon: -74.0445, zoom: 18 },
+    { name: "Eiffel Tower", lat: 48.8584, lon: 2.2945, zoom: 18 },
+    { name: "Taj Mahal", lat: 27.1751, lon: 78.0421, zoom: 17 },
+    { name: "Sydney Opera House", lat: -33.8568, lon: 151.2153, zoom: 18 },
+    { name: "Burj Khalifa", lat: 25.1972, lon: 55.2744, zoom: 17 },
+    { name: "Colosseum", lat: 41.8902, lon: 12.4922, zoom: 17 },
+    { name: "Big Ben & Parliament", lat: 51.5007, lon: -0.1246, zoom: 18 },
+    { name: "Golden Gate Bridge", lat: 37.8199, lon: -122.4783, zoom: 17 },
+  ]},
   { id: "wildlife", emoji: "🦁", title: "Wildlife & safaris", blurb: "Parks and plains where animals gather.", places: [
     { name: "Nairobi National Park", lat: -1.3733, lon: 36.8586, zoom: 11 },
     { name: "Maasai Mara", lat: -1.4061, lon: 35.0078, zoom: 10 },
